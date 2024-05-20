@@ -1,4 +1,4 @@
-====== flyway ======
+# flyway
 **Flyway** — это популярный инструмент для управления миграциями базы данных. Он помогает автоматизировать процесс развертывания изменений в структуре базы данных (например, создание таблиц, изменение столбцов, добавление индексов и т.д.) в различных окружениях (разработка, тестирование, продакшн).
 
 Основные функции Flyway включают:
@@ -13,33 +13,33 @@
 
  * Консистентность окружений: Используя Flyway, можно гарантировать, что все окружения (разработка, тестирование, продакшн) имеют одинаковую структуру базы данных, что уменьшает вероятность ошибок, связанных с различиями в схемах базы данных.
 
-===== Установка flyway на Linux/Unix =====
-==== загрузка установочных файлов ====
-Скачать с [[https://www.red-gate.com/products/flyway/editions | официального сайта.]]
+# Установка flyway на Linux/Unix
+## загрузка установочных файлов
+Скачать с [официального сайта.](https://www.red-gate.com/products/flyway/editions)  
 
-К сожаления, на 20.05.2024 возможность загрузки с официального сайта без использования VPN недоступна.
+К сожаления, на 20.05.2024 возможность загрузки с официального сайта без использования VPN недоступна.  
 
-==== установка с помощью snapd ====
+## установка с помощью snapd
 Возможно потребуется добавление репозиториев для установки snapd.
-<code bash>
+```bash
 sudo apt update
 sudo apt install snapd
 sudo snap install core
-</code>
-<code bash>
+```
+```bash
 sudo snap install flyway
-</code>
-<code bash>
+```
+```bash
 export PATH=$PATH:/snap/bin
-</code>
-<code bash>
+```
+```bash
 flyway -v
-</code>
-===== Пример использования flyway с Postgresql =====
-Предворительно установлен и настроен Postgresql.  
+```
+## Пример использования flyway с Postgresql
+Предварительно установлен и настроен Postgresql.  
 
 Примерная структура проекта: [[https://github.com/Raven988/flyway_example|GitHub]]
-<code bash>
+```
 project/  
 ├── sources/  
 │   └─ db/  
@@ -54,47 +54,53 @@ project/
 │      └── flyway.conf  
 ├── .gitignore  
 └── README.md  
-</code>
+```
 
 Настройки для подключения flyway к базе данных.  
-<file conf flyway.conf>
+flyway.conf:
+```
 flyway.url=jdbc:postgresql://localhost:5432/postgres
 flyway.user=postgres
 flyway.password=postgres
 flyway.locations=filesystem:./sources/db/
-</file>
+```
 
-<file sql V1__create_cars_table.sql>
+V1__create_cars_table.sql:
+```sql
 create table cars (
     id bigint not null,
     model varchar(50) not null,
     brand varchar(50) not null,
     primary key (id)
 );
-</file>
-<file sql V2__create_price_table.sql>
+```
+V2__create_price_table.sql:
+```
 create table prices (
     id bigint not null,
     price varchar(50) not null,
     car_id bigint,
     primary key (id)
 );
-</file>
-<file sql V3__add_cars_color.sql>
+```
+V3__add_cars_color.sql:
+```
 alter table cars
 add column color varchar(50);
-</file>
-<file sql V4__add_price_currency.sql>
+```
+V4__add_price_currency.sql:
+```
 alter table prices
 add column currency varchar(50);
-</file>
-<file sql V5__add_cars_type_body.sql>
+```
+V5__add_cars_type_body.sql:
+```
 alter table cars
 add column type_body varchar(50);
-</file>
+```
 
-
-<file sql B4__baseline_migration.sql>
+B4__baseline_migration.sql:
+```
 create table cars (
     id bigint not null,
     model varchar(50) not null,
@@ -114,8 +120,8 @@ add column color varchar(50);
 
 alter table prices
 add column currency varchar(50);
-</file>
-B4_baseline_migration.sql является объеденяющим скриптом, flyway просканирует директорию, выполнит этот срипт и пойдет дальше искать более новые версии V5-V6...Vn.
+```
+B4__baseline_migration.sql является объеденяющим скриптом, flyway просканирует директорию, выполнит этот срипт и пойдет дальше искать более новые версии V5-V6...Vn.
 
 Находясь в директории проекта, выполните команду в терминале:
 <code bash>
@@ -123,15 +129,16 @@ flyway info migrate
 </code>
 info - для побробной информации.
 
-===== Пример команды для запуска flyway в контейнере =====
+## Пример команды для запуска flyway в контейнере 
 Проще всего воспользоваться Docker контейнером.
 
-<code bash>
+```bash
 docker pull redgate/flyway
-</code>
+```
 
-<code bash>
+```bash
 docker run --rm -v "{absolute path to folder containing sql migrations}:/flyway/sql" -v "{absolute path to folder containing conf file}:/flyway/conf" redgate/flyway migrate
-</code>
+```
+ * Отредактируйте flyway.conf - удалите строчку flyway.locations=filesystem:./sources/db/
  * Замените {absolute path to folder containing sql migrations} на абсолютный путь к каталогу с миграциями
  * Замените {absolute path to folder containing conf file} на абсолютный путь к .conf файлу
