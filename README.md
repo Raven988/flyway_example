@@ -47,15 +47,15 @@ flyway -v
 project/  
 ├── sources/  
 │   └─ db/  
-│      ├── migrations/  
-|      |      ├── V1__create_cars_table.sql
-|      |      ├── V2__create_price_table.sql
-|      |      ├── V3__add_cars_color.sql
-|      |      ├── V4__add_price_currency.sql
-|      |      ├── B4__baseline_migration.sql
-|      |      └── V5__add_cars_type_body.sql 
-|      | 
-│      └── flyway.conf  
+│      └── migrations/  
+|            ├── V1__create_cars_table.sql
+|            ├── V2__create_price_table.sql
+|            ├── V3__add_cars_color.sql
+|            ├── V4__add_price_currency.sql
+|            ├── B4__baseline_migration.sql
+|            └── V5__add_cars_type_body.sql 
+|      
+├── flyway.conf  
 ├── .gitignore  
 └── README.md  
 ```
